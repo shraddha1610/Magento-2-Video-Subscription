@@ -9,10 +9,28 @@
 
 namespace Webcreta\Video\Controller\Index;
 
-class Index extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Exception\NotFoundException;
+use Webcreta\Video\Block\VideoView;
+
+class View extends \Magento\Framework\App\Action\Action
 {
+	protected $_videoview;
+
+	public function __construct(
+        Context $context,
+        VideoView $videoview
+    ) {
+        $this->_videoview = $videoview;
+        parent::__construct($context);
+    }
+
 	public function execute()
     {
+    	if(!$this->_videoview->getSingleData()){
+    		throw new NotFoundException(__('Parameter is incorrect.'));
+    	}
+    	
         $this->_view->loadLayout();
         $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
