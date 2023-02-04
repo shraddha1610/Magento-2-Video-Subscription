@@ -1,1 +1,127 @@
+<?php
 
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $blockObj = $block->getLayout()->createBlock('Webcreta\Video\Block\Video');
+$isSubscribe = $blockObj->getIsSubscribe($_product->getId());
+?>
+<?php if ($isSubscribe == 1) { ?>
+    <?php $buttonTitle = __('Add to Cart'); ?>
+    <?php if ($_product->isSaleable()) : ?>
+        <div class="box-tocart">
+            <div class="fieldset">
+                <div class="actions">
+                    <?php echo $block->getChildHtml('', true) ?>
+                    <div class="wishlistpart">
+                        <?php echo $this->getLayout()->createBlock("Magento\Catalog\Block\Product\View")->setTemplate("Magento_Catalog::product/view/addto.phtml")->toHtml(); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php } else { ?>
+    <?php $buttonTitle = __('Add to Cart'); ?>
+
+    <?php if ($_product->isSaleable()) : ?>
+        <div class="box-tocart">
+            <div class="fieldset">
+                <?php if ($block->shouldRenderQuantity()) : ?>
+                    <div class="field qty">
+
+                        <label class="label" for="qty"><span><?php /* @escapeNotVerified */
+                                                                echo __('Qty') ?></span></label>
+                        <!--<a class="decpart decrement_qty_<?php echo $_product->getId(); ?>" href="javascript:void(0)">-</a>
+            <div class="control control-qty-cart">
+                <input type="number"
+                       name="qty"
+                       id="qty"
+                       maxlength="12"
+                       value="<?php /* @escapeNotVerified */
+                                //echo $block->getProductDefaultQty() * 1 
+                                ?>"
+                       title="<?php /* @escapeNotVerified */
+                                //echo __('Qty') 
+                                ?>" class="qty-default input-text qty"
+                       data-validate="<?php //echo $block->escapeHtml(json_encode($block->getQuantityValidators())) 
+                                        ?>"
+                /> 
+            </div>
+            <a class="incpart increment_qty_<?php echo $_product->getId(); ?>" href="javascript:void(0)">+</a>-->
+                        <select name="qty" id="qty" title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty nos" data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>">
+                            <?php $i = 1; ?>
+                            <?php
+                            while ($i < 11) { ?>
+                                <option value="<?php echo $block->getProductDefaultQty() * $i; ?>"><?php echo $block->getProductDefaultQty() * $i; ?></option>
+                                <?php $i++; ?>
+                            <?php } ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+                <div class="actions">
+                    <button type="submit" title="<?php /* @escapeNotVerified */
+                                                    echo $buttonTitle ?>" class="action primary tocart" id="product-addtocart-button">
+                        <span><?php /* @escapeNotVerified */
+                                echo $buttonTitle ?></span>
+                    </button>
+                    <?php echo $block->getChildHtml('', true) ?>
+                    <div class="wishlistpart">
+                        <?php echo $this->getLayout()->createBlock("Magento\Catalog\Block\Product\View")->setTemplate("Magento_Catalog::product/view/addto.phtml")->toHtml(); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php } ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/product/view/validation": {
+                "radioCheckboxClosest": ".nested"
+            }
+        }
+    }
+</script>
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+    <script type="text/x-magento-init">
+        {
+        "#product_addtocart_form": {
+            "catalogAddToCart": {
+                "bindSubmit": false
+            }
+        }
+    }
+</script>
+<?php endif; ?>
+
+<script type="text/javascript">
+    //<![CDATA[
+    require(["jquery"], function($) {
+        jQuery(document).ready(function() {
+            var itemId = '<?php echo $_product->getId(); ?>';
+            jQuery('.increment_qty_' + itemId).click(function() {
+                var oldVal = jQuery(this).parent().find("input").val();
+                if (parseFloat(oldVal) >= 1) {
+                    var newVal = parseFloat(oldVal) + 1;
+                    jQuery(this).parent().find("input").val(newVal);
+                }
+            });
+
+            jQuery('.decrement_qty_' + itemId).click(function() {
+                var oldVal = jQuery(this).parent().find("input").val();
+                if (parseFloat(oldVal) >= 2) {
+                    var newVal = parseFloat(oldVal) - 1;
+                    jQuery(this).parent().find("input").val(newVal);
+                }
+            });
+        });
+    });
+    //]]>
+</script>
