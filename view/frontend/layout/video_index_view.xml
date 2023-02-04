@@ -11,7 +11,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Webcreta\Video\Block\VideoListData" name="video.listdata" template="Webcreta_Video::list.phtml" cacheable="false">
+            <block class="Webcreta\Video\Block\VideoView" name="video.view" template="Webcreta_Video::view.phtml" cacheable="false">
             </block>
         </referenceContainer>
     </body>

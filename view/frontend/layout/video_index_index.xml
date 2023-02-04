@@ -9,9 +9,13 @@
  */
  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+	    <css src="Webcreta_Video::css/custom_video.css" />
+	    <script src="Webcreta_Video::js/custom_video.js"/>
+	</head>
     <body>
         <referenceContainer name="content">
-            <block class="Webcreta\Video\Block\VideoListData" name="video.listdata" template="Webcreta_Video::list.phtml" cacheable="false">
+            <block class="Webcreta\Video\Block\Video" name="video.list" template="video.phtml">
             </block>
         </referenceContainer>
     </body>
